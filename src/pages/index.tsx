@@ -1,115 +1,146 @@
-import Image from "next/image";
-import localFont from "next/font/local";
+'use client'
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-});
+import { Github, Linkedin } from "lucide-react"
+import Link from "next/link"
+import { useState, useEffect, useCallback } from "react"
+import Head from "next/head"
+import Navbar from "./components/navigation"
+import TopBar from "./components/topbar"
+import CommandInput from "./components/commandInput"
 
 export default function Home() {
-  return (
-    <div
-      className={`${geistSans.variable} ${geistMono.variable} grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]`}
-    >
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/pages/index.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const [isLoading, setIsLoading] = useState(true)
+  const [descriptionText, setDescriptionText] = useState('')
+  const [commandHelpText, setCommandHelpText] = useState('')
+  const [userInput, setUserInput] = useState('')
+  const [showCursor, setShowCursor] = useState(false)
+  const [showHelp, setShowHelp] = useState(false)
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+  const nameAscii = `
+  ${'.'.repeat(50)}
+  █████  ███    ██ ██     ██  █████  ██████      
+ ██   ██ ████   ██ ██     ██ ██   ██ ██   ██     
+ ███████ ██ ██  ██ ██  █  ██ ███████ ██████      
+ ██   ██ ██  ██ ██ ██ ███ ██ ██   ██ ██   ██     
+ ██   ██ ██   ████  ███ ███  ██   ██ ██   ██     
+                                                  
+███    ███  █████   ██████   █████  ██████   █████  
+████  ████ ██   ██ ██       ██   ██ ██   ██ ██   ██ 
+██ ████ ██ ███████ ██   ███ ███████ ██████  ███████ 
+██  ██  ██ ██   ██ ██    ██ ██   ██ ██   ██ ██   ██ 
+██      ██ ██   ██  ██████  ██   ██ ██   ██ ██   ██ 
+${'.'.repeat(50)}
+`
+
+  const description = `I'm passionate about creating beautiful, intuitive, and performant user interfaces. With a strong foundation in React and modern web technologies, I strive to deliver exceptional user experiences.`
+
+  const commandHelp = `Type 'work' to see my projects or 'help' for more commands.`
+
+  const typeText = useCallback((text: string, setText: (text: string) => void, delay: number = 20) => {
+    let i = 0
+    return new Promise<void>((resolve) => {
+      const intervalId = setInterval(() => {
+        setText(text.slice(0, i))
+        i++
+        if (i > text.length) {
+          clearInterval(intervalId)
+          resolve()
+        }
+      }, delay)
+    })
+  }, [])
+
+  useEffect(() => {
+    const animateText = async () => {
+      await typeText('loading...', setDescriptionText)
+      await new Promise(resolve => setTimeout(resolve, 2000)) // Simulate loading
+      setIsLoading(false)
+
+      await typeText(description, setDescriptionText, 30)
+      setShowCursor(true)
+    }
+    animateText()
+  }, [typeText, description])
+
+  const handleNavigation = useCallback(() => {
+    const inputLowerCase = userInput.toLowerCase()
+    if (inputLowerCase === 'work') {
+      window.location.href = '/work'
+    } else if (inputLowerCase === 'contact' || inputLowerCase === 'contact me' || inputLowerCase === 'contacts') {
+      window.location.href = '/contact'
+    } else if (inputLowerCase === 'help') {
+      setShowHelp(true)
+    }
+  }, [userInput])
+
+  useEffect(() => {
+    const handleKeyPress = (event: KeyboardEvent) => {
+      if (event.key === 'Enter') {
+        handleNavigation()
+        setUserInput('')
+      } else if (event.key === 'Backspace') {
+        setUserInput(prev => prev.slice(0, -1))
+      } else if (event.key.length === 1) {
+        setUserInput(prev => prev + event.key)
+      }
+
+      if (event.ctrlKey && event.shiftKey && event.key.toLowerCase() === 'w') {
+        window.location.href = '/work'
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyPress)
+    return () => {
+      window.removeEventListener('keydown', handleKeyPress)
+    }
+  }, [userInput, handleNavigation])
+
+  return (
+    <>
+      <Head>
+        <title>Anwar Magara | Terminal Portfolio</title>
+      </Head>
+      <div className="min-h-screen bg-[#1e1e1e] text-green-500 font-mono flex flex-col justify-between">
+        {isLoading && (
+          <div className="fixed inset-0 flex items-center justify-center bg-black z-50">
+            <pre className="text-green-500 text-2xl">loading...</pre>
+          </div>
+        )}
+        <TopBar />
+        <main className="flex-1 p-8 overflow-auto z-10">
+          {!isLoading && (
+            <div className="flex flex-col">
+              <div className="grid grid-cols-2 gap-8 mb-8">
+                <pre className="whitespace-pre-wrap text-green-500">{nameAscii}</pre>
+                <div className="flex flex-col justify-center">
+                  <p className="text-green-500 text-right">{descriptionText}</p>
+                </div>
+              </div>
+              <p className="text-green-500 mb-4">{commandHelp}</p> {/* Display command help */}
+              <div className="flex flex-col space-y-2">
+                <CommandInput onMessageSend={function (): void {
+                  throw new Error("Function not implemented.")
+                } } isContactPage={false} />
+              </div>
+            </div>
+          )}
+        </main>
+
+        {showHelp && (
+          <div className="bg-[#2d2d2d] text-white p-4 flex justify-between items-center text-sm z-10">
+            <div className="text-green-500">
+              <p>Available commands:</p>
+              <ul>
+                <li>'work' - View projects</li>
+                <li>'contact' - Contact me</li>
+                <li>'help' - Show available commands</li>
+              </ul>
+            </div>
+          </div>
+        )}
+
+      <Navbar />
+      </div>
+    </>
   );
 }
