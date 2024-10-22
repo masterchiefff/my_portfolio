@@ -1,20 +1,15 @@
-'use client'
+'use client';
 
-import { Github, Linkedin } from "lucide-react"
-import Link from "next/link"
-import { useState, useEffect, useCallback } from "react"
-import Head from "next/head"
-import Navbar from "./components/navigation"
-import TopBar from "./components/topbar"
-import CommandInput from "./components/commandInput"
+import { useState, useEffect, useCallback } from "react";
+import Head from "next/head";
+import Navbar from "./components/navigation";
+import TopBar from "./components/topbar";
+import CommandInput from "./components/commandInput";
 
 export default function Home() {
-  const [isLoading, setIsLoading] = useState(true)
-  const [descriptionText, setDescriptionText] = useState('')
-  const [commandHelpText, setCommandHelpText] = useState('')
-  const [userInput, setUserInput] = useState('')
-  const [showCursor, setShowCursor] = useState(false)
-  const [showHelp, setShowHelp] = useState(false)
+  const [isLoading, setIsLoading] = useState(true);
+  const [descriptionText, setDescriptionText] = useState('');
+  const [showHelp, setShowHelp] = useState(false);
 
   const nameAscii = `
   ${'.'.repeat(50)}
@@ -30,70 +25,35 @@ export default function Home() {
 ██  ██  ██ ██   ██ ██    ██ ██   ██ ██   ██ ██   ██ 
 ██      ██ ██   ██  ██████  ██   ██ ██   ██ ██   ██ 
 ${'.'.repeat(50)}
-`
+`;
 
-  const description = `I'm passionate about creating beautiful, intuitive, and performant user interfaces. With a strong foundation in React and modern web technologies, I strive to deliver exceptional user experiences.`
-
-  const commandHelp = `Type 'work' to see my projects or 'help' for more commands.`
+  const description = `I'm passionate about creating beautiful, intuitive, and performant user interfaces. With a strong foundation in React and modern web technologies, I strive to deliver exceptional user experiences.`;
+  const commandHelp = `Type 'work' to see my projects or 'help' for more commands.`;
 
   const typeText = useCallback((text: string, setText: (text: string) => void, delay: number = 20) => {
-    let i = 0
+    let i = 0;
     return new Promise<void>((resolve) => {
       const intervalId = setInterval(() => {
-        setText(text.slice(0, i))
-        i++
+        setText(text.slice(0, i));
+        i++;
         if (i > text.length) {
-          clearInterval(intervalId)
-          resolve()
+          clearInterval(intervalId);
+          resolve();
         }
-      }, delay)
-    })
-  }, [])
+      }, delay);
+    });
+  }, []);
 
   useEffect(() => {
     const animateText = async () => {
-      await typeText('loading...', setDescriptionText)
-      await new Promise(resolve => setTimeout(resolve, 2000)) // Simulate loading
-      setIsLoading(false)
+      await typeText('loading...', setDescriptionText);
+      await new Promise(resolve => setTimeout(resolve, 2000)); // Simulate loading
+      setIsLoading(false);
 
-      await typeText(description, setDescriptionText, 30)
-      setShowCursor(true)
-    }
-    animateText()
-  }, [typeText, description])
-
-  const handleNavigation = useCallback(() => {
-    const inputLowerCase = userInput.toLowerCase()
-    if (inputLowerCase === 'work') {
-      window.location.href = '/work'
-    } else if (inputLowerCase === 'contact' || inputLowerCase === 'contact me' || inputLowerCase === 'contacts') {
-      window.location.href = '/contact'
-    } else if (inputLowerCase === 'help') {
-      setShowHelp(true)
-    }
-  }, [userInput])
-
-  useEffect(() => {
-    const handleKeyPress = (event: KeyboardEvent) => {
-      if (event.key === 'Enter') {
-        handleNavigation()
-        setUserInput('')
-      } else if (event.key === 'Backspace') {
-        setUserInput(prev => prev.slice(0, -1))
-      } else if (event.key.length === 1) {
-        setUserInput(prev => prev + event.key)
-      }
-
-      if (event.ctrlKey && event.shiftKey && event.key.toLowerCase() === 'w') {
-        window.location.href = '/work'
-      }
-    }
-
-    window.addEventListener('keydown', handleKeyPress)
-    return () => {
-      window.removeEventListener('keydown', handleKeyPress)
-    }
-  }, [userInput, handleNavigation])
+      await typeText(description, setDescriptionText, 30);
+    };
+    animateText();
+  }, [typeText, description]);
 
   return (
     <>
@@ -116,11 +76,11 @@ ${'.'.repeat(50)}
                   <p className="text-green-500 text-right">{descriptionText}</p>
                 </div>
               </div>
-              <p className="text-green-500 mb-4">{commandHelp}</p> {/* Display command help */}
+              <p className="text-green-500 mb-4">{commandHelp}</p>
               <div className="flex flex-col space-y-2">
                 <CommandInput onMessageSend={function (): void {
-                  throw new Error("Function not implemented.")
-                } } isContactPage={false} />
+                  throw new Error("Function not implemented.");
+                }} isContactPage={false} />
               </div>
             </div>
           )}
@@ -139,7 +99,7 @@ ${'.'.repeat(50)}
           </div>
         )}
 
-      <Navbar />
+        <Navbar />
       </div>
     </>
   );

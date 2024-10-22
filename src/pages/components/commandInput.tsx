@@ -1,5 +1,3 @@
-// components/CommandInput.tsx
-
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 
@@ -12,25 +10,35 @@ const CommandInput: React.FC<CommandInputProps> = ({ onMessageSend, isContactPag
   const [userInput, setUserInput] = useState<string>('');
   const router = useRouter();
 
+  const handleCommand = (command: string) => {
+    switch (command) {
+      case 'home':
+        router.push('/');
+        break;
+      case 'work':
+        router.push('/work');
+        break;
+      case 'contact':
+        router.push('/contact');
+        break;
+      case 'message':
+        if (isContactPage) {
+          onMessageSend();
+        }
+        break;
+      case 'help':
+        alert('Available commands: home, work, contact, message');
+        break;
+      default:
+        alert(`Unknown command: ${command}`);
+    }
+  };
+
   useEffect(() => {
     const handleKeyPress = (event: KeyboardEvent) => {
       if (event.key === 'Enter') {
-        const inputLower = userInput.toLowerCase();
-        if (inputLower === 'home') {
-          router.push('/');
-        } else if (inputLower === 'work') {
-          router.push('/work');
-        } else if (inputLower === 'contact') {
-          router.push('/contact'); // Navigate to contact page
-        } else if (inputLower === 'message') {
-          if (isContactPage) {
-            onMessageSend();
-          }
-        } else if (inputLower === 'help') {
-          alert('Available commands: home, work, contact, message');
-        } else {
-          alert(`Unknown command: ${userInput}`);
-        }
+        event.preventDefault();
+        handleCommand(userInput.toLowerCase());
         setUserInput('');
       } else if (event.key === 'Backspace') {
         setUserInput(prev => prev.slice(0, -1));
@@ -60,7 +68,7 @@ const CommandInput: React.FC<CommandInputProps> = ({ onMessageSend, isContactPag
           type="text"
           value={userInput}
           onChange={(e) => setUserInput(e.target.value)}
-          className="absolute opacity-0" // Keep the input field present but invisible
+          className="absolute opacity-0"
           autoFocus
         />
       </div>

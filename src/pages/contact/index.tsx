@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { Github, Linkedin, Mail, Phone, MapPin } from "lucide-react";
-import { useRouter } from 'next/router';
 import Head from "next/head"
 
 import CommandInput from "../components/commandInput";
@@ -12,7 +11,6 @@ import Navbar from "../components/navigation";
 const ContactsPage: React.FC = () => {
   const [text, setText] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const router = useRouter();
   const [showMessageInput, setShowMessageInput] = useState<boolean>(false);
   const [email, setEmail] = useState<string>('');
   const [message, setMessage] = useState<string>('');

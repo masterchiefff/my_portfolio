@@ -1,7 +1,5 @@
 'use client'
 
-import { Github, Linkedin, ArrowLeft } from "lucide-react"
-import Link from "next/link"
 import Image from "next/image"
 import { useState, useEffect, useCallback } from "react"
 import { useRouter } from 'next/router'

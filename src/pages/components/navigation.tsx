@@ -1,7 +1,7 @@
 'use client'
 
 import Link from "next/link"
-import { Github, Linkedin, ArrowLeft } from "lucide-react"
+import { Github, Linkedin } from "lucide-react"
 
 export default function Navbar() {
 
