@@ -9,7 +9,6 @@ import CommandInput from "./components/commandInput";
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [descriptionText, setDescriptionText] = useState('');
-  const [showHelp, setShowHelp] = useState(false); // You can remove this if not used
 
   const nameAscii = `
   ${'.'.repeat(50)}
@@ -85,19 +84,6 @@ ${'.'.repeat(50)}
             </div>
           )}
         </main>
-
-        {showHelp && (
-          <div className="bg-[#2d2d2d] text-white p-4 flex justify-between items-center text-sm z-10">
-            <div className="text-green-500">
-              <p>Available commands:</p>
-              <ul>
-                <li>&apos;work&apos; - View projects</li>
-                <li>&apos;contact&apos; - Contact me</li>
-                <li>&apos;help&apos; - Show available commands</li>
-              </ul>
-            </div>
-          </div>
-        )}
 
         <Navbar />
       </div>
