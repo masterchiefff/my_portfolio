@@ -9,7 +9,7 @@ import CommandInput from "./components/commandInput";
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [descriptionText, setDescriptionText] = useState('');
-  const [showHelp, setShowHelp] = useState(false);
+  const [showHelp, setShowHelp] = useState(false); // You can remove this if not used
 
   const nameAscii = `
   ${'.'.repeat(50)}
@@ -28,7 +28,7 @@ ${'.'.repeat(50)}
 `;
 
   const description = `I'm passionate about creating beautiful, intuitive, and performant user interfaces. With a strong foundation in React and modern web technologies, I strive to deliver exceptional user experiences.`;
-  const commandHelp = `Type 'work' to see my projects or 'help' for more commands.`;
+  const commandHelp = `Type &apos;work&apos; to see my projects or &apos;help&apos; for more commands.`;
 
   const typeText = useCallback((text: string, setText: (text: string) => void, delay: number = 20) => {
     let i = 0;
@@ -91,9 +91,9 @@ ${'.'.repeat(50)}
             <div className="text-green-500">
               <p>Available commands:</p>
               <ul>
-                <li>'work' - View projects</li>
-                <li>'contact' - Contact me</li>
-                <li>'help' - Show available commands</li>
+                <li>&apos;work&apos; - View projects</li>
+                <li>&apos;contact&apos; - Contact me</li>
+                <li>&apos;help&apos; - Show available commands</li>
               </ul>
             </div>
           </div>

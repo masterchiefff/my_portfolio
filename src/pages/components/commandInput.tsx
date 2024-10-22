@@ -57,7 +57,7 @@ const CommandInput: React.FC<CommandInputProps> = ({ onMessageSend, isContactPag
     <div className="flex flex-col mt-auto mb-6">
       {isContactPage && (
         <p className="text-green-500 mb-2">
-          Type 'message' to start sending a message to me, or 'help' for command options.
+          Type &apos;message&apos; to start sending a message to me, or &apos;help&apos; for command options.
         </p>
       )}
       <div className="flex items-center">

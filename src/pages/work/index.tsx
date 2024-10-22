@@ -137,7 +137,7 @@ export default function WorkPage() {
           </div>
         </div>
         <div className="mt-auto">
-          <p className="mb-2">Type 'home' to return to the main page or 'help' for more commands.</p>
+          <p className="mb-2">Type &apos;home&apos; to return to the main page or &apos;help&apos; for more commands.</p>
           <div className="flex items-center">
             <span>{'>'}</span>
             <span className="ml-2">{userInput}</span>
@@ -152,8 +152,8 @@ export default function WorkPage() {
           <div className="text-green-500">
             <p>Available commands:</p>
             <ul>
-              <li>'home' - Go to homepage</li>
-              <li>'help' - Show available commands</li>
+              <li>&apos;home&apos; - Go to homepage</li>
+              <li>&apos;help&apos; - Show available commands</li>
             </ul>
           </div>
         </div>
